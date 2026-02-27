@@ -9,6 +9,8 @@ certain choices, you'll find what you need here.
 New to the template? Start here:
 
 - [**Getting Started**](./getting-started.md) — Clone, setup, and first run
+- [**Development Workflow**](./development-workflow.md) — Branching, PRs,
+  testing, commit conventions
 
 ## Topic Guides
 

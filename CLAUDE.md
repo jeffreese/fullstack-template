@@ -21,6 +21,23 @@ pnpm db:studio    # Open Drizzle Studio
 pnpm db:seed      # Seed database
 ```
 
+## Development Workflow
+
+**All changes go through pull requests. Never push directly to `main`.**
+
+1. `git checkout -b feature/short-description` from latest `main`
+2. Write code, tests, and update relevant documentation
+3. Run `pnpm lint:fix && pnpm typecheck && pnpm test` before committing
+4. Push the branch and create a PR with `gh pr create`
+5. After merge: `git checkout main && git pull origin main`
+
+- All features must have tests
+- Documentation must be updated when behavior, structure, or commands change
+- Use `db:generate` + `db:migrate` (not `db:push`) for committed schema changes
+- Commit messages: imperative mood, explain why, <70 char summary line
+
+See [Development Workflow](./docs/development-workflow.md) for full details.
+
 ## Tech Stack
 
 - **Framework:** React Router v7 (SSR, framework mode)
