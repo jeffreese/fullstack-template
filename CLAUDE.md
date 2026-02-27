@@ -1,6 +1,7 @@
 # CLAUDE.md — Fullstack Template
 
 This file provides context for AI development tools working in this codebase.
+For detailed documentation, see the [`docs/`](./docs) folder.
 
 ## Quick Reference
 
@@ -64,12 +65,26 @@ app/
 │   └── utils.ts             # cn() class merge helper
 └── stores/
     └── ui-store.ts          # Zustand sidebar state
+docs/
+├── README.md                # Documentation hub
+├── getting-started.md       # Setup and first run
+├── routing.md               # React Router v7 conventions
+├── database.md              # Drizzle ORM + SQLite
+├── authentication.md        # better-auth setup and usage
+├── forms.md                 # Conform + Zod patterns
+├── styling.md               # Tailwind v4 OKLCH theme
+├── state-management.md      # Server state vs client state
+├── testing.md               # Vitest + Testing Library
+├── linting.md               # Biome configuration
+├── deployment.md            # Docker and production
+└── decisions/               # Architecture decision records (ADRs)
 ```
 
 ## Key Patterns
 
 ### Server-only files
-Files ending in `.server.ts` are excluded from client bundles. Use for database access, auth config, and session helpers.
+Files ending in `.server.ts` are excluded from client bundles. Use for database
+access, auth config, and session helpers.
 
 ### Database
 - Schema defined in `app/db/schema.ts` using Drizzle's `sqliteTable`
@@ -86,6 +101,8 @@ Files ending in `.server.ts` are excluded from client bundles. Use for database 
 ### Forms (Conform + Zod)
 - Define schemas in `app/lib/schemas.ts`
 - Use `parseWithZod(formData, { schema })` in route actions
+- **Import from `@conform-to/zod/v4`**, not `@conform-to/zod` (required for
+  Zod v4 compatibility)
 - Use `useForm()` with `onValidate` for client-side validation
 - Forms use progressive enhancement (work without JS)
 
@@ -116,5 +133,12 @@ Files ending in `.server.ts` are excluded from client bundles. Use for database 
 
 - Vitest config is separate from Vite (`vitest.config.ts`)
 - Use `// @vitest-environment jsdom` directive for component tests
-- Test utils in `test/test-utils.tsx` provide wrapped render
+- Test utils in `test/test-utils.tsx` provide wrapped render with `act()`
 - Unit tests don't need the jsdom directive
+
+## Known Issues
+
+- pnpm requires `node-linker=hoisted` in `.npmrc` for React Router SSR
+  compatibility (prevents duplicate React instances via symlinks)
+- `@conform-to/zod` default export is incompatible with Zod v4 — always use
+  the `/v4` subpath import
