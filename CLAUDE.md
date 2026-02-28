@@ -57,27 +57,27 @@ See [Development Workflow](./docs/development-workflow.md) for full details.
 
 ```
 app/
+├── config.ts                # App name/initials (update via setup.sh)
 ├── root.tsx                 # HTML shell, error boundary
 ├── app.css                  # Tailwind theme (OKLCH tokens)
 ├── routes.ts                # Route config
 ├── routes/
 │   ├── layout.tsx           # Sidebar layout (auth-aware)
-│   ├── home.tsx             # Dashboard
+│   ├── home.tsx             # Dashboard (customize this)
 │   ├── login.tsx            # Login form (Conform)
 │   ├── register.tsx         # Registration form (Conform)
 │   ├── logout.tsx           # Logout action
-│   ├── protected.tsx        # Auth-guarded example
+│   ├── protected.tsx        # Auth-guarded example (customize this)
 │   ├── forgot-password.tsx  # Password reset request
 │   ├── reset-password.tsx   # Password reset form (token-based)
 │   ├── not-found.tsx        # 404 catch-all
 │   ├── api.auth.$.ts        # better-auth API handler
 │   └── api.health.ts        # Health check endpoint
 ├── components/
-│   ├── ui/                  # shadcn/ui + custom components
-│   └── error-display.tsx    # Route error display component
+│   └── ui/                  # shadcn/ui + custom components
 ├── db/
 │   ├── index.server.ts      # DB singleton (GlobalThis pattern)
-│   ├── schema.ts            # Drizzle schema (auth + app tables)
+│   ├── schema.ts            # Drizzle schema (auth tables + your tables)
 │   └── seed.ts              # Seed script
 ├── lib/
 │   ├── auth.server.ts       # better-auth config
@@ -104,7 +104,25 @@ docs/
 └── decisions/               # Architecture decision records (ADRs)
 ```
 
+## Installed Components
+
+**shadcn/ui components** (in `app/components/ui/`):
+
+- alert-dialog, button, dialog, input, label, skeleton, sonner, table
+
+**Custom components** (not from shadcn — also in `app/components/ui/`):
+
+- confirm-dialog, data-table, empty-state, error-display, field-error,
+  form-error, form-field, navigation-progress, submit-button
+
+Add new shadcn components: `pnpm dlx shadcn@latest add <component>`
+
 ## Key Patterns
+
+### App Metadata
+- App name and initials are centralized in `app/config.ts`
+- All route meta titles and sidebar branding import from `~/config`
+- `setup.sh` replaces these values when creating a new project
 
 ### Environment Variables
 - Validated at startup via `app/lib/env.server.ts` (Zod schema)
@@ -117,6 +135,7 @@ access, auth config, and session helpers.
 
 ### Database
 - Schema defined in `app/db/schema.ts` using Drizzle's `sqliteTable`
+- Auth tables are managed by better-auth; add your own below them
 - GlobalThis singleton prevents multiple connections during HMR
 - WAL mode enabled for concurrent reads
 - After schema changes: `pnpm db:generate && pnpm db:migrate`
@@ -130,10 +149,13 @@ access, auth config, and session helpers.
 ### Forms (Conform + Zod)
 - Define schemas in `app/lib/schemas.ts`
 - Use `parseWithZod(formData, { schema })` in route actions
+- Return `submission.reply()` directly from actions (not wrapped in an object)
+- Pass `useActionData()` directly as `lastResult` to `useForm()`
 - **Import from `@conform-to/zod/v4`**, not `@conform-to/zod` (required for
   Zod v4 compatibility)
 - Use `useForm()` with `onValidate` for client-side validation
 - Forms use progressive enhancement (work without JS)
+- See `app/routes/login.tsx` as the canonical form example
 
 ### Styling & Components
 - Tailwind v4 with `:root` + `@theme inline` in `app/app.css`
@@ -141,8 +163,9 @@ access, auth config, and session helpers.
 - OKLCH color tokens using shadcn naming: `background`, `foreground`, `card`,
   `muted`, `destructive`, `accent`, etc.
 - Custom tokens: `warning`, `success`, `primary-light`, `destructive-light`, etc.
+- `nav-link-active` is a custom CSS class defined in `app/app.css` (not a
+  Tailwind utility) — used for sidebar active state
 - Use `cn()` from `~/lib/utils` to merge class names
-- Add new shadcn components: `pnpm dlx shadcn@latest add <component>`
 - Config in `components.json` (aliases, style, CSS path)
 
 ### State Management
@@ -153,6 +176,98 @@ access, auth config, and session helpers.
 - Loaders fetch data, actions handle mutations
 - Use `redirect()` for navigation after mutations
 - Forward `set-cookie` headers from better-auth responses
+
+## Recipes
+
+### Add a new page
+
+1. Create route file:
+   ```
+   app/routes/about.tsx
+   ```
+   Export `meta()`, `loader()` (if needed), and a default component.
+
+2. Register in `app/routes.ts` inside the layout group:
+   ```ts
+   route('about', 'routes/about.tsx'),
+   ```
+
+3. Optionally add a sidebar link in `app/routes/layout.tsx`.
+
+### Add a new form with validation
+
+1. Add a Zod schema to `app/lib/schemas.ts`
+2. Create a route with an action that uses `parseWithZod`:
+   ```ts
+   const submission = parseWithZod(formData, { schema: mySchema })
+   if (submission.status !== 'success') return submission.reply()
+   ```
+3. Use `useForm({ lastResult, onValidate })` in the component
+4. Use `<FormField>`, `<Input error={...}>`, `<FieldError>` for form fields
+5. See `app/routes/login.tsx` for the complete pattern
+
+### Add a new database table
+
+1. Define the table in `app/db/schema.ts` (below the "Application tables"
+   comment)
+2. Run `pnpm db:generate && pnpm db:migrate`
+3. Import and query in server-side loaders/actions:
+   ```ts
+   import { db } from '~/db/index.server'
+   import { myTable } from '~/db/schema'
+   ```
+
+### Add a new API endpoint
+
+1. Create a route file that exports only `loader` and/or `action` (no default
+   component):
+   ```
+   app/routes/api.my-endpoint.ts
+   ```
+2. Register **outside** the layout group in `app/routes.ts`:
+   ```ts
+   route('api/my-endpoint', 'routes/api.my-endpoint.ts'),
+   ```
+
+### Add a new shadcn component
+
+```bash
+pnpm dlx shadcn@latest add <component-name>
+```
+
+This generates into `app/components/ui/`. If the CLI doesn't install
+`class-variance-authority`, add it manually: `pnpm add class-variance-authority`
+
+## What to Customize
+
+When starting a new project from this template:
+
+- **`app/config.ts`** — App name and initials (or run `setup.sh`)
+- **`app/routes/home.tsx`** — Replace the starter dashboard
+- **`app/routes/protected.tsx`** — Replace the example protected page
+- **`app/routes/layout.tsx`** — Update sidebar navigation links
+- **`app/db/schema.ts`** — Add your own tables below the auth tables
+- **`app/db/seed.ts`** — Add seed data for your tables
+- **`app/app.css`** — Customize the color tokens in `:root`
+
+**Keep as-is** (infrastructure):
+
+- `app/root.tsx`, `app/routes.ts`, auth routes (`login`, `register`, `logout`,
+  `forgot-password`, `reset-password`), API routes, `app/lib/*`, `app/db/index.server.ts`
+
+## Not Included
+
+These are common needs not covered by the template — add as needed:
+
+- **Dark mode** — Light theme only; Sonner is hardcoded to `theme="light"`
+- **Email sending** — Password reset logs to console (`auth.server.ts`);
+  integrate Resend, Postmark, etc. for production
+- **File uploads** — No upload handling or storage
+- **Pagination** — No pagination helpers; add per-route as needed
+- **Role-based authorization** — Only authenticated/unauthenticated; no roles
+- **API rate limiting** — No rate limiting middleware
+- **Background jobs** — No job queue or scheduler
+- **Real-time** — No WebSocket or SSE support
 
 ## Code Style
 

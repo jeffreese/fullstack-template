@@ -1,10 +1,11 @@
 import { Shield } from 'lucide-react'
 import { useLoaderData } from 'react-router'
+import { APP_NAME } from '~/config'
 import { requireSession } from '~/lib/session.server'
 import type { Route } from './+types/protected'
 
 export function meta() {
-  return [{ title: 'Protected — Fullstack Template' }]
+  return [{ title: `Protected — ${APP_NAME}` }]
 }
 
 export async function loader({ request }: Route.LoaderArgs) {
@@ -14,6 +15,9 @@ export async function loader({ request }: Route.LoaderArgs) {
   }
 }
 
+// TODO: Replace this example with your own protected content.
+// This route demonstrates the requireSession() pattern — unauthenticated
+// visitors are redirected to /login automatically.
 export default function Protected() {
   const { user } = useLoaderData<typeof loader>()
 

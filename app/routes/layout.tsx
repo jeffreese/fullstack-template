@@ -1,5 +1,6 @@
 import { Home, LogIn, LogOut, Shield, UserPlus } from 'lucide-react'
 import { NavLink, Outlet, useLoaderData } from 'react-router'
+import { APP_INITIALS, APP_NAME } from '~/config'
 import { getOptionalSession } from '~/lib/session.server'
 import { cn } from '~/lib/utils'
 import { useUIStore } from '~/stores/ui-store'
@@ -55,11 +56,9 @@ export default function Layout() {
       >
         <div className="flex h-14 items-center gap-2 border-b border-white/10 px-4">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-xs font-bold text-primary-foreground">
-            FT
+            {APP_INITIALS}
           </div>
-          <span className="text-sm font-semibold text-white">
-            Fullstack Template
-          </span>
+          <span className="text-sm font-semibold text-white">{APP_NAME}</span>
         </div>
 
         <nav className="flex-1 space-y-1 overflow-y-auto p-3">

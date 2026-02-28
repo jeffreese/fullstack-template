@@ -1,49 +1,28 @@
+import { APP_NAME } from '~/config'
 import type { Route } from './+types/home'
 
 export function meta(_args: Route.MetaArgs) {
   return [
-    { title: 'Fullstack Template' },
+    { title: APP_NAME },
     {
       name: 'description',
-      content: 'A fullstack React Router v7 project template.',
+      content: `${APP_NAME} — built with React Router v7.`,
     },
   ]
 }
 
+// TODO: Replace this page with your own dashboard content.
 export default function Home() {
   return (
     <div className="mx-auto max-w-2xl">
       <h1 className="text-2xl font-bold mb-4">Dashboard</h1>
-      <p className="text-muted-foreground mb-6">
-        Welcome to the Fullstack Template. This is your starting point for
-        building full-stack applications with React Router v7.
+      <p className="text-muted-foreground">
+        Welcome to {APP_NAME}. Edit{' '}
+        <code className="rounded bg-muted px-1.5 py-0.5 text-sm font-mono">
+          app/routes/home.tsx
+        </code>{' '}
+        to get started.
       </p>
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div className="rounded-lg border border-border bg-card p-4">
-          <h2 className="font-semibold mb-1">Authentication</h2>
-          <p className="text-sm text-muted-foreground">
-            Email/password auth powered by better-auth with session management.
-          </p>
-        </div>
-        <div className="rounded-lg border border-border bg-card p-4">
-          <h2 className="font-semibold mb-1">Database</h2>
-          <p className="text-sm text-muted-foreground">
-            SQLite with Drizzle ORM for type-safe queries and migrations.
-          </p>
-        </div>
-        <div className="rounded-lg border border-border bg-card p-4">
-          <h2 className="font-semibold mb-1">Forms</h2>
-          <p className="text-sm text-muted-foreground">
-            Conform + Zod for progressive enhancement and validation.
-          </p>
-        </div>
-        <div className="rounded-lg border border-border bg-card p-4">
-          <h2 className="font-semibold mb-1">Styling</h2>
-          <p className="text-sm text-muted-foreground">
-            Tailwind CSS v4 with OKLCH semantic color tokens.
-          </p>
-        </div>
-      </div>
     </div>
   )
 }
