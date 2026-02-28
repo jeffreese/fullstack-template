@@ -156,6 +156,22 @@ import {
 
 ## Loading States
 
+### NavigationProgress — Route Transition Bar
+
+A thin animated bar at the top of the viewport that shows during route
+transitions. It's rendered in `app/root.tsx` and requires no configuration:
+
+```tsx
+import { NavigationProgress } from '~/components/ui/navigation-progress'
+
+// Already rendered in root.tsx Layout — you don't need to add this yourself
+<NavigationProgress />
+```
+
+Uses `useNavigation()` from React Router to detect loading state. The bar
+animates with a CSS keyframe defined in `app/app.css` and fades in/out with
+opacity transitions.
+
 ### SubmitButton — Button with Pending State
 
 Automatically shows a spinner and disables itself during form submission:

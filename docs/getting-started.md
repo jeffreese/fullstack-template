@@ -33,8 +33,16 @@ pnpm dev
 ```
 
 Open [http://localhost:5173](http://localhost:5173). You should see the
-dashboard with a sidebar. Try registering an account — the full auth flow works
-out of the box.
+dashboard with a sidebar.
+
+The seed script creates a test account you can use right away:
+
+| | |
+|---|---|
+| **Email** | `test@example.com` |
+| **Password** | `password123` |
+
+Or register a new account — the full auth flow works out of the box.
 
 ## Commands
 

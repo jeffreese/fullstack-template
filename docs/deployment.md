@@ -38,11 +38,19 @@ docker run -p 3000:3000 \
 
 ## Environment Variables
 
+Environment variables are validated at startup using Zod (see
+`app/lib/env.server.ts`). If a required variable is missing or invalid, the app
+will fail to start with a clear error message.
+
 | Variable | Required | Default | Description |
 |----------|----------|---------|-------------|
 | `DATABASE_URL` | No | `sqlite.db` | Path to the SQLite database file |
 | `BETTER_AUTH_SECRET` | Yes | — | Secret key for signing session cookies |
-| `BETTER_AUTH_URL` | Yes | — | Public URL of the application |
+| `BETTER_AUTH_URL` | No | `http://localhost:5173` | Public URL of the application |
+| `NODE_ENV` | No | `development` | `development`, `production`, or `test` |
+
+A warning is logged if `BETTER_AUTH_SECRET` is still the default value in
+production.
 
 ### Generating a Secret
 
@@ -63,6 +71,20 @@ pnpm start
 ```
 
 The production server runs on port 3000 by default.
+
+## Health Check
+
+The template includes a health check endpoint at `/api/health` that verifies
+the database connection:
+
+```bash
+curl http://localhost:3000/api/health
+# {"status":"ok","timestamp":"2026-02-27T..."}
+```
+
+Returns 200 with `{"status": "ok"}` when healthy, or 500 with
+`{"status": "error"}` if the database is unreachable. Use this for load
+balancer health checks, Docker `HEALTHCHECK`, or uptime monitoring.
 
 ## Deployment Platforms
 

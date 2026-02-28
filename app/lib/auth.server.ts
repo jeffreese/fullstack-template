@@ -10,6 +10,10 @@ export const auth = betterAuth({
   }),
   emailAndPassword: {
     enabled: true,
+    async sendResetPassword({ user, url }) {
+      // TODO: Send email in production (e.g., via Resend, Postmark, etc.)
+      console.log(`[Auth] Password reset for ${user.email}: ${url}`)
+    },
   },
   session: {
     cookieCache: {

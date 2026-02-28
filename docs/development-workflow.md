@@ -40,6 +40,19 @@ git pull origin main
 git branch -d feature/short-description
 ```
 
+## Continuous Integration
+
+A GitHub Actions workflow (`.github/workflows/ci.yml`) runs automatically on
+every push to `main` and on pull requests. It runs:
+
+1. `pnpm lint` — Biome lint checks (no auto-fix — CI should fail on errors)
+2. `pnpm typecheck` — TypeScript type checking
+3. `pnpm test` — All Vitest tests
+4. `pnpm build` — Production build
+
+All four must pass before a PR can be merged. The workflow uses Node 22 with
+pnpm via corepack and caches the pnpm store for fast installs.
+
 ## Pre-Commit Checks
 
 Before committing, run these to catch issues early:

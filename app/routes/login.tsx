@@ -93,6 +93,14 @@ export default function Login() {
               error={!!fields.password.errors}
             />
             <FieldError errors={fields.password.errors} />
+            <div className="text-right">
+              <Link
+                to="/forgot-password"
+                className="text-xs text-primary hover:underline"
+              >
+                Forgot password?
+              </Link>
+            </div>
           </FormField>
 
           <Button type="submit" className="w-full">
