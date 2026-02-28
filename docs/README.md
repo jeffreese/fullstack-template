@@ -30,6 +30,7 @@ it for your project.
 - [**Testing**](./testing.md) — Vitest, Testing Library, writing tests
 - [**Linting & Formatting**](./linting.md) — Biome configuration and usage
 - [**Deployment**](./deployment.md) — Docker, environment variables, production
+- [**Troubleshooting**](./troubleshooting.md) — Common issues and solutions
 
 ## Decisions
 

@@ -1,4 +1,11 @@
-import { Home, LogIn, LogOut, Shield, UserPlus } from 'lucide-react'
+import {
+  Home,
+  LogIn,
+  LogOut,
+  NotebookPen,
+  Shield,
+  UserPlus,
+} from 'lucide-react'
 import { NavLink, Outlet, useLoaderData } from 'react-router'
 import { APP_INITIALS, APP_NAME } from '~/config'
 import { getOptionalSession } from '~/lib/session.server'
@@ -66,9 +73,14 @@ export default function Layout() {
             Dashboard
           </SidebarLink>
           {user && (
-            <SidebarLink to="/protected" icon={Shield}>
-              Protected
-            </SidebarLink>
+            <>
+              <SidebarLink to="/protected" icon={Shield}>
+                Protected
+              </SidebarLink>
+              <SidebarLink to="/notes" icon={NotebookPen}>
+                Notes
+              </SidebarLink>
+            </>
           )}
         </nav>
 

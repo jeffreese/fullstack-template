@@ -17,7 +17,8 @@ const auth = betterAuth({
 async function seed() {
   console.log('Seeding database...')
 
-  // Clear existing data
+  // Clear existing data (order matters for foreign keys)
+  db.delete(schema.note).run()
   db.delete(schema.session).run()
   db.delete(schema.account).run()
   db.delete(schema.verification).run()
@@ -36,9 +37,26 @@ async function seed() {
     throw new Error('Failed to create test user')
   }
 
+  // Seed example notes
+  db.insert(schema.note)
+    .values([
+      {
+        title: 'Welcome to the template',
+        body: 'This is an example note created by the seed script.',
+        authorId: result.user.id,
+      },
+      {
+        title: 'Getting started',
+        body: 'Edit app/routes/notes.tsx to customize this page.',
+        authorId: result.user.id,
+      },
+    ])
+    .run()
+
   console.log('Created test user:')
   console.log('  Email:    test@example.com')
   console.log('  Password: password123')
+  console.log('Created 2 example notes.')
   console.log('Seed complete.')
 }
 
