@@ -107,7 +107,7 @@ export default function Layout() {
           <button
             type="button"
             onClick={toggleSidebar}
-            className="rounded-lg p-2 text-text-muted transition-colors hover:bg-surface-hover hover:text-text"
+            className="rounded-lg p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
             aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           >
             <svg

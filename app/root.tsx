@@ -9,6 +9,7 @@ import {
 
 import type { Route } from './+types/root'
 import './app.css'
+import { Toaster } from '~/components/ui/sonner'
 
 export const links: Route.LinksFunction = () => [
   { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
@@ -34,6 +35,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         {children}
+        <Toaster />
         <ScrollRestoration />
         <Scripts />
       </body>
@@ -63,17 +65,17 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   }
 
   return (
-    <main className="flex items-center justify-center min-h-screen bg-surface">
+    <main className="flex items-center justify-center min-h-screen bg-background">
       <div className="text-center max-w-md mx-auto px-4">
         <div
           className={`mx-auto mb-4 w-16 h-16 rounded-full flex items-center justify-center text-2xl ${
-            is404 ? 'bg-warning-light' : 'bg-danger-light'
+            is404 ? 'bg-warning/10' : 'bg-destructive-light'
           }`}
         >
           {is404 ? '?' : '!'}
         </div>
         <h1 className="text-2xl font-bold mb-2">{title}</h1>
-        <p className="text-sm text-text-muted mb-6">{description}</p>
+        <p className="text-sm text-muted-foreground mb-6">{description}</p>
         <a
           href="/"
           className="inline-flex items-center gap-2 px-4 py-2 text-sm rounded-lg bg-primary text-primary-foreground hover:bg-primary-dark transition-colors"
@@ -81,8 +83,8 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
           Go to Dashboard
         </a>
         {stack && (
-          <pre className="mt-6 p-4 rounded-lg bg-surface-raised text-left text-xs overflow-x-auto border border-border max-h-64 overflow-y-auto">
-            <code className="text-danger">{stack}</code>
+          <pre className="mt-6 p-4 rounded-lg bg-card text-left text-xs overflow-x-auto border border-border max-h-64 overflow-y-auto">
+            <code className="text-destructive">{stack}</code>
           </pre>
         )}
       </div>

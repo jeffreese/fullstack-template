@@ -2,6 +2,8 @@ import { useForm } from '@conform-to/react'
 import { parseWithZod } from '@conform-to/zod/v4'
 import { Form, Link, redirect, useActionData } from 'react-router'
 import { Button } from '~/components/ui/button'
+import { FieldError } from '~/components/ui/field-error'
+import { FormField } from '~/components/ui/form-field'
 import { Input } from '~/components/ui/input'
 import { Label } from '~/components/ui/label'
 import { auth } from '~/lib/auth.server'
@@ -60,7 +62,7 @@ export default function Login() {
 
       <Form method="post" id={form.id} onSubmit={form.onSubmit} noValidate>
         {form.errors && (
-          <div className="mb-4 rounded-lg bg-danger-light px-4 py-3 text-sm text-danger">
+          <div className="mb-4 rounded-lg bg-destructive-light px-4 py-3 text-sm text-destructive">
             {form.errors.map((error, i) => (
               <p key={i}>{error}</p>
             ))}
@@ -68,7 +70,7 @@ export default function Login() {
         )}
 
         <div className="space-y-4">
-          <div>
+          <FormField>
             <Label htmlFor={fields.email.id}>Email</Label>
             <Input
               id={fields.email.id}
@@ -78,14 +80,10 @@ export default function Login() {
               autoComplete="email"
               error={!!fields.email.errors}
             />
-            {fields.email.errors && (
-              <p className="mt-1 text-xs text-danger">
-                {fields.email.errors[0]}
-              </p>
-            )}
-          </div>
+            <FieldError errors={fields.email.errors} />
+          </FormField>
 
-          <div>
+          <FormField>
             <Label htmlFor={fields.password.id}>Password</Label>
             <Input
               id={fields.password.id}
@@ -94,12 +92,8 @@ export default function Login() {
               autoComplete="current-password"
               error={!!fields.password.errors}
             />
-            {fields.password.errors && (
-              <p className="mt-1 text-xs text-danger">
-                {fields.password.errors[0]}
-              </p>
-            )}
-          </div>
+            <FieldError errors={fields.password.errors} />
+          </FormField>
 
           <Button type="submit" className="w-full">
             Login
@@ -107,7 +101,7 @@ export default function Login() {
         </div>
       </Form>
 
-      <p className="mt-4 text-center text-sm text-text-muted">
+      <p className="mt-4 text-center text-sm text-muted-foreground">
         Don&apos;t have an account?{' '}
         <Link to="/register" className="text-primary hover:underline">
           Register

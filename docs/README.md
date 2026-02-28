@@ -23,6 +23,8 @@ it for your project.
   protected routes
 - [**Forms**](./forms.md) — Conform + Zod, progressive enhancement, validation
 - [**Styling**](./styling.md) — Tailwind CSS v4, OKLCH color system, theming
+- [**UI Patterns**](./ui-patterns.md) — Toasts, dialogs, form errors, loading
+  states, tables, empty states
 - [**State Management**](./state-management.md) — Server state vs client state,
   Zustand
 - [**Testing**](./testing.md) — Vitest, Testing Library, writing tests
@@ -43,6 +45,7 @@ wondering "why X instead of Y?", these are for you.
 - [**007 — Linting: Biome**](./decisions/007-linting.md)
 - [**008 — Testing: Vitest**](./decisions/008-testing.md)
 - [**009 — Package Manager: pnpm**](./decisions/009-package-manager.md)
+- [**010 — Component Library: shadcn/ui**](./decisions/010-component-library.md)
 
 ## Contributing
 

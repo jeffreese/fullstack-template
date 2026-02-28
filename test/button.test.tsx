@@ -11,16 +11,22 @@ describe('Button', () => {
     ).toBeInTheDocument()
   })
 
-  it('applies primary variant by default', async () => {
+  it('applies default variant (primary styling)', async () => {
     await render(<Button>Primary</Button>)
     const button = screen.getByRole('button')
     expect(button.className).toContain('bg-primary')
   })
 
-  it('applies secondary variant', async () => {
-    await render(<Button variant="secondary">Secondary</Button>)
+  it('applies destructive variant', async () => {
+    await render(<Button variant="destructive">Delete</Button>)
     const button = screen.getByRole('button')
-    expect(button.className).toContain('bg-surface-raised')
+    expect(button.className).toContain('bg-destructive')
+  })
+
+  it('applies outline variant', async () => {
+    await render(<Button variant="outline">Outline</Button>)
+    const button = screen.getByRole('button')
+    expect(button.className).toContain('border')
   })
 
   it('can be disabled', async () => {
