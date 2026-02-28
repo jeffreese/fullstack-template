@@ -116,6 +116,42 @@ export async function action({ request }: Route.ActionArgs) {
 Without forwarding this header, the session cookie won't be set and the user
 won't actually be logged in after the redirect.
 
+## Forgot Password / Reset Password
+
+The template includes a password reset flow. In development, reset links are
+logged to the console. In production, replace the `sendResetPassword` callback
+in `app/lib/auth.server.ts` with your email provider (Resend, Postmark, etc.).
+
+### How it works
+
+1. User visits `/forgot-password` and enters their email
+2. The action calls `auth.api.requestPasswordReset()` which triggers the
+   `sendResetPassword` callback
+3. The response always says "If an account exists, we sent a reset link" to
+   prevent email enumeration
+4. The reset link redirects to `/reset-password?token=...`
+5. User enters a new password + confirmation, the action calls
+   `auth.api.resetPassword()` with the token
+6. On success, the user is redirected to `/login`
+
+### Wiring up email
+
+Update the callback in `app/lib/auth.server.ts`:
+
+```ts
+emailAndPassword: {
+  enabled: true,
+  async sendResetPassword({ user, url }) {
+    // Replace with your email provider
+    await sendEmail({
+      to: user.email,
+      subject: 'Reset your password',
+      html: `<a href="${url}">Reset password</a>`,
+    })
+  },
+},
+```
+
 ## Adding OAuth Providers
 
 better-auth supports OAuth through plugins. To add GitHub login, for example:

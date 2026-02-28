@@ -9,6 +9,7 @@ import {
 
 import type { Route } from './+types/root'
 import './app.css'
+import { NavigationProgress } from '~/components/ui/navigation-progress'
 import { Toaster } from '~/components/ui/sonner'
 
 export const links: Route.LinksFunction = () => [
@@ -34,6 +35,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <Links />
       </head>
       <body>
+        <NavigationProgress />
         {children}
         <Toaster />
         <ScrollRestoration />

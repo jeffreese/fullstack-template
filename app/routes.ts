@@ -12,6 +12,10 @@ export default [
     route('register', 'routes/register.tsx'),
     route('logout', 'routes/logout.tsx'),
     route('protected', 'routes/protected.tsx'),
+    route('forgot-password', 'routes/forgot-password.tsx'),
+    route('reset-password', 'routes/reset-password.tsx'),
+    route('*', 'routes/not-found.tsx'),
   ]),
   route('api/auth/*', 'routes/api.auth.$.ts'),
+  route('api/health', 'routes/api.health.ts'),
 ] satisfies RouteConfig

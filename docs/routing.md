@@ -23,8 +23,12 @@ export default [
     route('register', 'routes/register.tsx'),
     route('logout', 'routes/logout.tsx'),
     route('protected', 'routes/protected.tsx'),
+    route('forgot-password', 'routes/forgot-password.tsx'),
+    route('reset-password', 'routes/reset-password.tsx'),
+    route('*', 'routes/not-found.tsx'),
   ]),
   route('api/auth/*', 'routes/api.auth.$.ts'),
+  route('api/health', 'routes/api.health.ts'),
 ] satisfies RouteConfig
 ```
 
@@ -97,12 +101,26 @@ The `layout()` wrapper in `routes.ts` creates a shared layout. Our main layout
 (`routes/layout.tsx`) provides the sidebar, header, and auth-aware navigation.
 All routes nested inside it render into the layout's `<Outlet />`.
 
+## Catch-All Route (404)
+
+The `route('*', 'routes/not-found.tsx')` entry at the end of the layout group
+catches any URL that doesn't match a defined route. Its loader returns a 404
+status (for SEO/bots) and the component renders a friendly "Page Not Found"
+message inside the app shell with the sidebar.
+
+The catch-all must be the **last** entry in the layout group so it doesn't
+shadow other routes.
+
 ## API Routes
 
 Routes that only export a `loader` and/or `action` (no default component) work
-as API endpoints. The better-auth handler at `routes/api.auth.$.ts` is an
-example — it's a splat route that delegates all `/api/auth/*` requests to
-better-auth.
+as API endpoints. The better-auth handler at `routes/api.auth.$.ts` is a splat
+route that delegates all `/api/auth/*` requests to better-auth. The health check
+at `routes/api.health.ts` is a simple endpoint that verifies the database
+connection.
+
+API routes are defined outside the layout group since they don't need the
+sidebar/header UI.
 
 ## Type-Safe Routes
 

@@ -18,7 +18,7 @@ pnpm db:generate  # Generate Drizzle migrations
 pnpm db:migrate   # Run migrations
 pnpm db:push      # Push schema directly (dev)
 pnpm db:studio    # Open Drizzle Studio
-pnpm db:seed      # Seed database
+pnpm db:seed      # Seed database (creates test@example.com / password123)
 ```
 
 ## Development Workflow
@@ -67,7 +67,11 @@ app/
 │   ├── register.tsx         # Registration form (Conform)
 │   ├── logout.tsx           # Logout action
 │   ├── protected.tsx        # Auth-guarded example
-│   └── api.auth.$.ts        # better-auth API handler
+│   ├── forgot-password.tsx  # Password reset request
+│   ├── reset-password.tsx   # Password reset form (token-based)
+│   ├── not-found.tsx        # 404 catch-all
+│   ├── api.auth.$.ts        # better-auth API handler
+│   └── api.health.ts        # Health check endpoint
 ├── components/
 │   ├── ui/                  # shadcn/ui + custom components
 │   └── error-display.tsx    # Route error display component
@@ -78,6 +82,7 @@ app/
 ├── lib/
 │   ├── auth.server.ts       # better-auth config
 │   ├── auth.client.ts       # Client auth (signIn, signUp, signOut)
+│   ├── env.server.ts        # Environment variable validation (Zod)
 │   ├── session.server.ts    # requireSession / getOptionalSession
 │   ├── schemas.ts           # Zod validation schemas
 │   └── utils.ts             # cn() class merge helper
@@ -100,6 +105,11 @@ docs/
 ```
 
 ## Key Patterns
+
+### Environment Variables
+- Validated at startup via `app/lib/env.server.ts` (Zod schema)
+- Import `env` from `~/lib/env.server` instead of using raw `process.env`
+- Warns in production if `BETTER_AUTH_SECRET` is still the default
 
 ### Server-only files
 Files ending in `.server.ts` are excluded from client bundles. Use for database

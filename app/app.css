@@ -105,3 +105,19 @@ body {
 .nav-link-active {
   @apply bg-sidebar-hover text-white;
 }
+
+@keyframes progress {
+  0% {
+    width: 0%;
+  }
+  50% {
+    width: 70%;
+  }
+  100% {
+    width: 95%;
+  }
+}
+
+.animate-progress {
+  animation: progress 2s ease-in-out infinite;
+}
