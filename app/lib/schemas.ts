@@ -31,3 +31,10 @@ export const registerSchema = z
     message: 'Passwords do not match',
     path: ['confirmPassword'],
   })
+
+// TODO: Replace with your own schemas. This demonstrates the pattern for
+// Conform + Zod validation with route actions.
+export const noteSchema = z.object({
+  title: z.string().min(1, 'Title is required'),
+  body: z.string().optional(),
+})

@@ -12,6 +12,8 @@ export default [
     route('register', 'routes/register.tsx'),
     route('logout', 'routes/logout.tsx'),
     route('protected', 'routes/protected.tsx'),
+    route('notes', 'routes/notes.tsx'),
+    route('notes/:noteId', 'routes/notes.$noteId.tsx'),
     route('forgot-password', 'routes/forgot-password.tsx'),
     route('reset-password', 'routes/reset-password.tsx'),
     route('*', 'routes/not-found.tsx'),

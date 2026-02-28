@@ -57,19 +57,20 @@ export const verification = sqliteTable('verification', {
 })
 
 // ─── Application tables ─────────────────────────────────────────────────────
-// Add your own tables below. Example:
-//
-// export const posts = sqliteTable('posts', {
-//   id: integer('id').primaryKey({ autoIncrement: true }),
-//   title: text('title').notNull(),
-//   content: text('content'),
-//   authorId: text('author_id')
-//     .notNull()
-//     .references(() => user.id, { onDelete: 'cascade' }),
-//   createdAt: integer('created_at', { mode: 'timestamp' })
-//     .$defaultFn(() => new Date())
-//     .notNull(),
-//   updatedAt: integer('updated_at', { mode: 'timestamp' })
-//     .$defaultFn(() => new Date())
-//     .notNull(),
-// })
+// TODO: Replace this example table with your own. This demonstrates the
+// Drizzle schema pattern with foreign keys, timestamps, and defaults.
+
+export const note = sqliteTable('note', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  title: text('title').notNull(),
+  body: text('body'),
+  authorId: text('author_id')
+    .notNull()
+    .references(() => user.id, { onDelete: 'cascade' }),
+  createdAt: integer('created_at', { mode: 'timestamp' })
+    .notNull()
+    .$defaultFn(() => new Date()),
+  updatedAt: integer('updated_at', { mode: 'timestamp' })
+    .notNull()
+    .$defaultFn(() => new Date()),
+})
