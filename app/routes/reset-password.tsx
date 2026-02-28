@@ -13,12 +13,13 @@ import { FormError } from '~/components/ui/form-error'
 import { FormField } from '~/components/ui/form-field'
 import { Input } from '~/components/ui/input'
 import { Label } from '~/components/ui/label'
+import { APP_NAME } from '~/config'
 import { auth } from '~/lib/auth.server'
 import { resetPasswordSchema } from '~/lib/schemas'
 import type { Route } from './+types/reset-password'
 
 export function meta() {
-  return [{ title: 'Reset Password — Fullstack Template' }]
+  return [{ title: `Reset Password — ${APP_NAME}` }]
 }
 
 export function loader({ request }: Route.LoaderArgs) {

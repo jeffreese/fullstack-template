@@ -18,7 +18,6 @@ async function seed() {
   console.log('Seeding database...')
 
   // Clear existing data
-  db.delete(schema.posts).run()
   db.delete(schema.session).run()
   db.delete(schema.account).run()
   db.delete(schema.verification).run()

@@ -57,18 +57,19 @@ export const verification = sqliteTable('verification', {
 })
 
 // ─── Application tables ─────────────────────────────────────────────────────
-
-export const posts = sqliteTable('posts', {
-  id: integer('id').primaryKey({ autoIncrement: true }),
-  title: text('title').notNull(),
-  content: text('content'),
-  authorId: text('author_id')
-    .notNull()
-    .references(() => user.id, { onDelete: 'cascade' }),
-  createdAt: integer('created_at', { mode: 'timestamp' })
-    .$defaultFn(() => new Date())
-    .notNull(),
-  updatedAt: integer('updated_at', { mode: 'timestamp' })
-    .$defaultFn(() => new Date())
-    .notNull(),
-})
+// Add your own tables below. Example:
+//
+// export const posts = sqliteTable('posts', {
+//   id: integer('id').primaryKey({ autoIncrement: true }),
+//   title: text('title').notNull(),
+//   content: text('content'),
+//   authorId: text('author_id')
+//     .notNull()
+//     .references(() => user.id, { onDelete: 'cascade' }),
+//   createdAt: integer('created_at', { mode: 'timestamp' })
+//     .$defaultFn(() => new Date())
+//     .notNull(),
+//   updatedAt: integer('updated_at', { mode: 'timestamp' })
+//     .$defaultFn(() => new Date())
+//     .notNull(),
+// })

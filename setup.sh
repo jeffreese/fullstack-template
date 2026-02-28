@@ -20,9 +20,21 @@ if [ -z "$PROJECT_NAME" ]; then
   exit 1
 fi
 
+# Derive initials from project name (first letter of first two words, uppercase)
+INITIALS=$(echo "$PROJECT_NAME" | awk '{for(i=1;i<=NF&&i<=2;i++) printf toupper(substr($i,1,1))}')
+if [ ${#INITIALS} -lt 2 ]; then
+  # Single-word name: use first two letters
+  INITIALS=$(echo "$PROJECT_NAME" | cut -c1-2 | awk '{print toupper($0)}')
+fi
+
+echo "→ Renaming project to '$PROJECT_NAME' ($INITIALS)..."
+
 # Rename in package.json
-echo "→ Renaming project to '$PROJECT_NAME'..."
 sed -i.bak "s/\"fullstack-template\"/\"$PROJECT_NAME\"/" package.json && rm -f package.json.bak
+
+# Rename in app/config.ts (centralized app metadata)
+sed -i.bak "s/export const APP_NAME = '.*'/export const APP_NAME = '$PROJECT_NAME'/" app/config.ts && rm -f app/config.ts.bak
+sed -i.bak "s/export const APP_INITIALS = '.*'/export const APP_INITIALS = '$INITIALS'/" app/config.ts && rm -f app/config.ts.bak
 
 # Generate .env from example
 if [ ! -f .env ]; then

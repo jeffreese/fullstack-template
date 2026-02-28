@@ -6,12 +6,13 @@ import { FieldError } from '~/components/ui/field-error'
 import { FormField } from '~/components/ui/form-field'
 import { Input } from '~/components/ui/input'
 import { Label } from '~/components/ui/label'
+import { APP_NAME } from '~/config'
 import { auth } from '~/lib/auth.server'
 import { forgotPasswordSchema } from '~/lib/schemas'
 import type { Route } from './+types/forgot-password'
 
 export function meta() {
-  return [{ title: 'Forgot Password — Fullstack Template' }]
+  return [{ title: `Forgot Password — ${APP_NAME}` }]
 }
 
 export async function action({ request }: Route.ActionArgs) {

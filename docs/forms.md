@@ -28,7 +28,8 @@ export const loginSchema = z.object({
 
 ## Server Validation
 
-In the route action, use `parseWithZod` to validate form data:
+In the route action, use `parseWithZod` to validate form data. Return
+`submission.reply()` directly — Conform knows how to interpret it:
 
 ```ts
 import { parseWithZod } from '@conform-to/zod/v4'
@@ -39,11 +40,16 @@ export async function action({ request }: Route.ActionArgs) {
   const submission = parseWithZod(formData, { schema: loginSchema })
 
   if (submission.status !== 'success') {
-    return { lastResult: submission.reply() }
+    return submission.reply()
   }
 
   const { email, password } = submission.value
   // Do something with the validated data...
+
+  // Return form errors from the server:
+  return submission.reply({
+    formErrors: ['Invalid email or password'],
+  })
 }
 ```
 
@@ -52,18 +58,24 @@ export async function action({ request }: Route.ActionArgs) {
 
 ## Form Component
 
-Use Conform's `useForm` hook to wire up the form:
+Use Conform's `useForm` hook to wire up the form. Pass `useActionData()`
+directly as `lastResult`:
 
-```ts
-import { useForm, getFormProps, getInputProps } from '@conform-to/react'
+```tsx
+import { useForm } from '@conform-to/react'
 import { parseWithZod } from '@conform-to/zod/v4'
 import { Form, useActionData } from 'react-router'
+import { Button } from '~/components/ui/button'
+import { FieldError } from '~/components/ui/field-error'
+import { FormField } from '~/components/ui/form-field'
+import { Input } from '~/components/ui/input'
+import { Label } from '~/components/ui/label'
 import { loginSchema } from '~/lib/schemas'
 
 export default function LoginPage() {
-  const actionData = useActionData<typeof action>()
+  const lastResult = useActionData<typeof action>()
   const [form, fields] = useForm({
-    lastResult: actionData?.lastResult,
+    lastResult,
     onValidate({ formData }) {
       return parseWithZod(formData, { schema: loginSchema })
     },
@@ -72,14 +84,42 @@ export default function LoginPage() {
   })
 
   return (
-    <Form method="post" {...getFormProps(form)}>
-      <input {...getInputProps(fields.email, { type: 'email' })} />
-      {fields.email.errors && <p>{fields.email.errors}</p>}
+    <Form method="post" id={form.id} onSubmit={form.onSubmit} noValidate>
+      {form.errors && (
+        <div className="mb-4 rounded-lg bg-destructive-light px-4 py-3 text-sm text-destructive">
+          {form.errors.map((error, i) => (
+            <p key={i}>{error}</p>
+          ))}
+        </div>
+      )}
 
-      <input {...getInputProps(fields.password, { type: 'password' })} />
-      {fields.password.errors && <p>{fields.password.errors}</p>}
+      <div className="space-y-4">
+        <FormField>
+          <Label htmlFor={fields.email.id}>Email</Label>
+          <Input
+            id={fields.email.id}
+            name={fields.email.name}
+            type="email"
+            error={!!fields.email.errors}
+          />
+          <FieldError errors={fields.email.errors} />
+        </FormField>
 
-      <button type="submit">Log in</button>
+        <FormField>
+          <Label htmlFor={fields.password.id}>Password</Label>
+          <Input
+            id={fields.password.id}
+            name={fields.password.name}
+            type="password"
+            error={!!fields.password.errors}
+          />
+          <FieldError errors={fields.password.errors} />
+        </FormField>
+
+        <Button type="submit" className="w-full">
+          Log in
+        </Button>
+      </div>
     </Form>
   )
 }
@@ -110,9 +150,13 @@ clear immediately when fixed.
 
 The template includes styled form components in `app/components/ui/`:
 
-- `<Button>` — Styled button with variants
-- `<Input>` — Styled input compatible with Conform's `getInputProps`
+- `<FormField>` — Wrapper div with consistent vertical spacing
+- `<FieldError>` — Shows the first validation error for a field
+- `<FormError>` — Banner for form-level errors (e.g., "Invalid credentials")
+- `<SubmitButton>` — Button with automatic spinner during submission
+- `<Input>` — Styled input with `error` boolean prop for destructive border
 - `<Label>` — Styled label
+- `<Button>` — Styled button with variants
 
 These are thin wrappers around HTML elements. They accept all standard props
 and forward refs.

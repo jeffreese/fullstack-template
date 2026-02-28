@@ -6,12 +6,13 @@ import { FieldError } from '~/components/ui/field-error'
 import { FormField } from '~/components/ui/form-field'
 import { Input } from '~/components/ui/input'
 import { Label } from '~/components/ui/label'
+import { APP_NAME } from '~/config'
 import { auth } from '~/lib/auth.server'
 import { registerSchema } from '~/lib/schemas'
 import type { Route } from './+types/register'
 
 export function meta() {
-  return [{ title: 'Register — Fullstack Template' }]
+  return [{ title: `Register — ${APP_NAME}` }]
 }
 
 export async function action({ request }: Route.ActionArgs) {
