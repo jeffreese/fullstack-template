@@ -43,7 +43,8 @@ See [Development Workflow](./docs/development-workflow.md) for full details.
 - **Framework:** React Router v7 (SSR, framework mode)
 - **Language:** TypeScript 5 (strict)
 - **Build:** Vite
-- **Styling:** Tailwind CSS v4 (OKLCH tokens via `@theme` in `app/app.css`)
+- **Styling:** Tailwind CSS v4 (OKLCH tokens via `:root` + `@theme inline` in `app/app.css`)
+- **Components:** shadcn/ui (Radix UI + Tailwind, copy-paste model)
 - **Database:** Drizzle ORM + better-sqlite3 (SQLite)
 - **Auth:** better-auth (email/password, session-based)
 - **Forms:** Conform + Zod (progressive enhancement)
@@ -68,8 +69,8 @@ app/
 │   ├── protected.tsx        # Auth-guarded example
 │   └── api.auth.$.ts        # better-auth API handler
 ├── components/
-│   ├── ui/                  # Reusable UI primitives
-│   └── error-display.tsx    # Error display component
+│   ├── ui/                  # shadcn/ui + custom components
+│   └── error-display.tsx    # Route error display component
 ├── db/
 │   ├── index.server.ts      # DB singleton (GlobalThis pattern)
 │   ├── schema.ts            # Drizzle schema (auth + app tables)
@@ -89,7 +90,8 @@ docs/
 ├── database.md              # Drizzle ORM + SQLite
 ├── authentication.md        # better-auth setup and usage
 ├── forms.md                 # Conform + Zod patterns
-├── styling.md               # Tailwind v4 OKLCH theme
+├── styling.md               # Tailwind v4 + shadcn/ui theme
+├── ui-patterns.md           # UI patterns (toasts, dialogs, tables)
 ├── state-management.md      # Server state vs client state
 ├── testing.md               # Vitest + Testing Library
 ├── linting.md               # Biome configuration
@@ -123,11 +125,15 @@ access, auth config, and session helpers.
 - Use `useForm()` with `onValidate` for client-side validation
 - Forms use progressive enhancement (work without JS)
 
-### Styling
-- Tailwind v4 with `@theme` directive in `app/app.css`
-- OKLCH color tokens: primary, accent, danger, warning, success
-- Surface tokens: surface, surface-raised, surface-hover, surface-sunken
+### Styling & Components
+- Tailwind v4 with `:root` + `@theme inline` in `app/app.css`
+- shadcn/ui components in `app/components/ui/` (owned source code, not npm)
+- OKLCH color tokens using shadcn naming: `background`, `foreground`, `card`,
+  `muted`, `destructive`, `accent`, etc.
+- Custom tokens: `warning`, `success`, `primary-light`, `destructive-light`, etc.
 - Use `cn()` from `~/lib/utils` to merge class names
+- Add new shadcn components: `pnpm dlx shadcn@latest add <component>`
+- Config in `components.json` (aliases, style, CSS path)
 
 ### State Management
 - Server state: React Router loaders/actions (no client cache needed)

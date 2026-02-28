@@ -14,11 +14,11 @@ export function ErrorDisplay({ error }: { error: unknown }) {
   return (
     <div className="flex items-center justify-center min-h-[60vh]">
       <div className="text-center max-w-md mx-auto px-4">
-        <div className="mx-auto mb-4 w-12 h-12 rounded-full bg-danger-light flex items-center justify-center text-lg">
+        <div className="mx-auto mb-4 w-12 h-12 rounded-full bg-destructive-light flex items-center justify-center text-lg">
           !
         </div>
         <h2 className="text-xl font-bold mb-2">{title}</h2>
-        <p className="text-sm text-text-muted">{description}</p>
+        <p className="text-sm text-muted-foreground">{description}</p>
       </div>
     </div>
   )

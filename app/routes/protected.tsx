@@ -26,25 +26,27 @@ export default function Protected() {
         <h1 className="text-2xl font-bold">Protected Page</h1>
       </div>
 
-      <div className="rounded-lg border border-border bg-surface-raised p-6">
+      <div className="rounded-lg border border-border bg-card p-6">
         <h2 className="font-semibold mb-4">Your Profile</h2>
         <dl className="space-y-3 text-sm">
           <div>
-            <dt className="text-text-muted">Name</dt>
+            <dt className="text-muted-foreground">Name</dt>
             <dd className="font-medium">{user.name}</dd>
           </div>
           <div>
-            <dt className="text-text-muted">Email</dt>
+            <dt className="text-muted-foreground">Email</dt>
             <dd className="font-medium">{user.email}</dd>
           </div>
           <div>
-            <dt className="text-text-muted">User ID</dt>
-            <dd className="font-mono text-xs text-text-light">{user.id}</dd>
+            <dt className="text-muted-foreground">User ID</dt>
+            <dd className="font-mono text-xs text-foreground-light">
+              {user.id}
+            </dd>
           </div>
         </dl>
       </div>
 
-      <p className="mt-4 text-sm text-text-muted">
+      <p className="mt-4 text-sm text-muted-foreground">
         This page is only accessible to authenticated users. Unauthenticated
         visitors are redirected to the login page.
       </p>
